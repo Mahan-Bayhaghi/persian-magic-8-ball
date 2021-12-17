@@ -1,8 +1,20 @@
 <?php
-$question = '';
-$msg = 'این یک پاسخ نمونه است';
-$en_name = 'hafez';
-$fa_name = 'حافظ';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST")
+{
+	$question = '' ;
+	$people_json = file_get_contents("people.json");
+	$names_list = json_decode($people_json);
+	
+	$messages_file = fopen("messages.txt" , "r");
+	$messages_list = array() ;
+	$t=0 ;		// counter for lines of messages.txt in messages_list array
+	while ( !feof($messages_file)){
+		$messages_list[$t] = fgets($messages_file);
+		$t++;
+	}
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -40,11 +52,12 @@ $fa_name = 'حافظ';
 					$names_list = json_decode($people_json);
 					foreach ($names_list as $eng_esm => $far_esm){
 						if ($en_name == $eng_esm){
-						
+							echo "<option value=$eng_esm selected> $far_esm </option>";
 						}
 						else{
-							
+							echo "<option value=$eng_esm> $far_esm </option>";
 						}
+					}
                 ?>
             </select>
             <input type="submit" value="بپرس"/>
