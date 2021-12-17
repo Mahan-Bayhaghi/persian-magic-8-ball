@@ -8,10 +8,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 	
 	$messages_file = fopen("messages.txt" , "r");
 	$messages_list = array() ;
-	$t=0 ;		// counter for lines of messages.txt in messages_list array
+	$t=0 ;		// counter for lines in messages_list array
 	while ( !feof($messages_file)){
 		$messages_list[$t] = fgets($messages_file);
 		$t++;
+	}
+	
+	$question = $_POST["question"] ;	// POSTed from html tag
+	$en_name = $_POST["person"] ;		// POSTed from html tag
+	// creating unique code by hashing question and en_name
+	$prime_code = hexdec(hash("crc32" , $question.$en_name));		// hexadecimal pass converted to decimal pass
+	$unipass = $prime_code % 16 ;		// mod in terms of all choices (16)
+	$msg = $messages_list[$unipass] ;
+	
+	foreach ($names_list as $name_en => $name_fa){
+		if ( $name_en == $en_name ){
+			$fa_name = $name_fa ;
+		}
 	}
 }
 
