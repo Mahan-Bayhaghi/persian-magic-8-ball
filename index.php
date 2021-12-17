@@ -1,11 +1,12 @@
 <?php
-
+$question = '' ;
+$en_name = '' ;
+$msg = '';
+$fa_name = '';
+$people_json = file_get_contents("people.json");
+$names_list = json_decode($people_json);
 if ($_SERVER["REQUEST_METHOD"] == "POST")
 {
-	$question = '' ;
-	$people_json = file_get_contents("people.json");
-	$names_list = json_decode($people_json);
-	
 	$messages_file = fopen("messages.txt" , "r");
 	$messages_list = array() ;
 	$t=0 ;		// counter for lines in messages_list array
@@ -27,6 +28,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 		}
 	}
 }
+else
+{
+	$second_names_list = array();
+	$counter = 0 ;
+	foreach ($names_list as $name_eng => $name_far){
+		$second_names_list[$counter]=$name_eng;
+		$counter++;
+	}
+	
+	$en_name = $second_names_list[array_rand($second_names_list)];
+	foreach ($names_list as $en_esm => $fa_esm){
+		if ($en_name == $en_esm){
+			$fa_name = $fa_esm ;
+		}
+	}
+}
 
 ?>
 <!DOCTYPE html>
@@ -40,12 +57,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 <p id="copyright">تهیه شده برای درس کارگاه کامپیوتر،دانشکده کامییوتر، دانشگاه صنعتی شریف</p>
 <div id="wrapper">
     <div id="title">
-        <span id="label">پرسش:</span>
+        <span id="label">
+			<?php
+				if ($question != ""){
+					echo "پرسش:";
+				}
+			?>
+		</span>
         <span id="question"><?php echo $question ?></span>
     </div>
     <div id="container">
         <div id="message">
-            <p><?php echo $msg ?></p>
+            <p><?php 
+				if ($question != ""){
+					echo $msg ;
+				}
+				else{
+					echo "سوال خود را بپرس";
+				}	
+				?></p>
         </div>
         <div id="person">
             <div id="person">
@@ -59,7 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
             سوال
             <input type="text" name="question" value="<?php echo $question ?>" maxlength="150" placeholder="..."/>
             را از
-            <select name="person" >
+            <select name="person" value="<?php echo $fa_name ?>" action="index.php" >
                 <?php
 					$people_json = file_get_contents("people.json") ;
 					$names_list = json_decode($people_json);
