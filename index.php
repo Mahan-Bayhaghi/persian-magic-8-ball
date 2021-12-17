@@ -27,6 +27,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST")
 			$fa_name = $name_fa ;
 		}
 	}
+	
+	if ( $question != ""){
+		$first_pattern = "/^آیا/";
+		$second_pattern = "/\?$|\؟$/";
+		if ( !preg_match($first_pattern , $question) || !preg_match($second_pattern,$question) ){
+			$msg = "سوال درستی پرسیده نشده است" ;
+		}
+	}
 }
 else
 {
