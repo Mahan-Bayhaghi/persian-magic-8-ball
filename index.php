@@ -1,5 +1,5 @@
 <?php
-$question = 'این یک پرسش نمونه است';
+$question = '';
 $msg = 'این یک پاسخ نمونه است';
 $en_name = 'hafez';
 $fa_name = 'حافظ';
@@ -34,13 +34,17 @@ $fa_name = 'حافظ';
             سوال
             <input type="text" name="question" value="<?php echo $question ?>" maxlength="150" placeholder="..."/>
             را از
-            <select name="person">
+            <select name="person" >
                 <?php
-                /*
-                 * Loop over people data and
-                 * enter data inside `option` tag.
-                 * E.g., <option value="hafez">حافظ</option>
-                 */
+					$people_json = file_get_contents("people.json") ;
+					$names_list = json_decode($people_json);
+					foreach ($names_list as $eng_esm => $far_esm){
+						if ($en_name == $eng_esm){
+						
+						}
+						else{
+							
+						}
                 ?>
             </select>
             <input type="submit" value="بپرس"/>
